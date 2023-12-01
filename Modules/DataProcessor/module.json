@@ -1,0 +1,11 @@
+{
+    "name": "DataProcessor",
+    "alias": "dataprocessor",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\DataProcessor\\app\\Providers\\DataProcessorServiceProvider"
+    ],
+    "files": []
+}

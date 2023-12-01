@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use \Modules\DataProcessor\app\Http\Controllers\DataProcessorController;
 
 /*
     |--------------------------------------------------------------------------
@@ -13,3 +14,5 @@ use Illuminate\Support\Facades\Route;
     |
 */
 
+Route::post('/process-data', DataProcessorController::class)
+    ->middleware(['throttle:processData', 'checkQuota']);

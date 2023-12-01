@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Modules\DataProcessor\app\Models\ProcessHistory;
+use Modules\DataProcessor\app\Models\Quota;
 
 class User extends Authenticatable
 {
@@ -42,4 +44,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function quota()
+    {
+        return $this->hasOne(Quota::class);
+    }
+
+    public function processHistories()
+    {
+        return $this->hasMany(ProcessHistory::class);
+    }
 }

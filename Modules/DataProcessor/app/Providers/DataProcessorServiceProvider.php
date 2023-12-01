@@ -17,6 +17,8 @@ class DataProcessorServiceProvider extends ServiceProvider
     {
         $this->registerConfig();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'database/migrations'));
+
+        $router->aliasMiddleware('checkQuota', \Modules\DataProcessor\app\Http\Middleware\QuotaMiddleware::class);
     }
 
     /**

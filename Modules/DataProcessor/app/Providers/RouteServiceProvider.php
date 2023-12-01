@@ -5,7 +5,6 @@ namespace Modules\DataProcessor\app\Providers;
 use App\Models\User;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
@@ -25,6 +24,25 @@ class RouteServiceProvider extends ServiceProvider
     public function boot(): void
     {
         parent::boot();
+
+        $this->rateLimiters();
+    }
+
+
+    /**
+     * Define the "Rate Limiters" for the requests.
+     */
+    private function rateLimiters(): void
+    {
+        RateLimiter::for('processData', function (Request $request) {
+            $user = User::findOrFail($request->user_id);
+
+            if (! $quota = $user->quota) {
+                abort(403);
+            }
+
+            return Limit::perMinute($quota->request_rate);
+        });
     }
 
     /**

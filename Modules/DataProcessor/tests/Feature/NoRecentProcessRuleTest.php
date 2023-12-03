@@ -17,6 +17,11 @@ class NoRecentProcessRuleTest extends TestCase
     {
         $user = User::factory()
             ->hasQuota(1)
+            ->hasProcessHistories([
+                'created_at' => now()->startOfYear(),
+                'object_volume' => 0
+
+            ])
             ->create();
 
         $this->post('/api/process-data', [
@@ -30,13 +35,15 @@ class NoRecentProcessRuleTest extends TestCase
     public function passes_validation_has_process_exists()
     {
         $user = User::factory()
-            ->hasProcessHistories()
+            ->hasProcessHistories([
+                'object_volume' => 0
+            ])
             ->create();
 
         $this->post('/api/process-data', [
             "user_id" => $user->id,
             "object_uuid" => $user->processHistories()->latest()->first()->object_uuid,
-            "object_volume" => rand()
+            "object_volume" => 0
         ])->assertForbidden();
     }
 }

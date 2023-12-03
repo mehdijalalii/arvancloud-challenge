@@ -13,9 +13,5 @@ class DataProcessorController extends Controller
         $processHistory = ProcessHistory::query()->create($request->validated());
 
         // queue and storage logics...
-
-        return response()->json([
-            'process_id' => $processHistory->id
-        ]);
     }
 }

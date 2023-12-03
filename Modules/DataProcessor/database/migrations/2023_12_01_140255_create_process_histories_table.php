@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('process_histories', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            $table->uuid('object_uuid');
+            $table->uuid('object_uuid')->index();
             $table->unsignedBigInteger('object_volume')->comment('byte volume size in a month');
             $table->timestamps();
         });

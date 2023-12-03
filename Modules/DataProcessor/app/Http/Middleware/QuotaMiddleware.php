@@ -5,6 +5,7 @@ namespace Modules\DataProcessor\app\Http\Middleware;
 use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
+use Modules\DataProcessor\services\QuotaService;
 
 class QuotaMiddleware
 {
@@ -15,29 +16,8 @@ class QuotaMiddleware
     {
         $user = User::findOrFail($request->user_id);;
 
-        $quota = $user->quota;
-
-        $this->abortIfNoQuota($quota);
-
-        $sumOfSize = $this->calculateSumOfSize($user);
-
-        $this->checkQuotaExceeded($sumOfSize, $quota, $request);
+        QuotaService::handleUserQuota($user, $request->object_volume);
 
         return $next($request);
-    }
-
-    private function abortIfNoQuota($quota): void
-    {
-        abort_if(! $quota, 403);
-    }
-
-    private function calculateSumOfSize($user): int
-    {
-        return $user->processHistories()->sum('object_volume');
-    }
-
-    private function checkQuotaExceeded($sumOfSize, $quota, $request): void
-    {
-        abort_if($sumOfSize + $request->object_volume > $quota->volume_rate, 429, 'Request denied: monthly limit exceeded');
     }
 }

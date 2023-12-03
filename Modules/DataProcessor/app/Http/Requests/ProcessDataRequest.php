@@ -12,21 +12,13 @@ class ProcessDataRequest extends FormRequest
      */
     public function rules(): array
     {
-        if ($this->method() === 'POST') {
-            return $this->validatePostMethod();
-        }
-
-        return [];
-    }
-
-    public function validatePostMethod(): array
-    {
         return [
             'user_id' => 'required',
             'object_uuid' => ['required', new NoRecentProcessRule],
             'object_volume' => 'required'
         ];
     }
+
     /**
      * Determine if the user is authorized to make this request.
      */
